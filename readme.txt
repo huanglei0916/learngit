@@ -10,3 +10,4 @@ add dev branch
 creating a new branch is quick and simple.
 test merge --on--ff 参数.
 merge dev2 to dev.
+this is dev.
