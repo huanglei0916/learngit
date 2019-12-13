@@ -8,3 +8,5 @@ change third wwwwww
 添加了一个分支
 add dev branch
 creating a new branch is quick and simple.
+test merge --on--ff 参数.
+merge dev2 to dev.
