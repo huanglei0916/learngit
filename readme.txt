@@ -7,4 +7,4 @@ change third wwwwww
 特殊给他实施实施多
 添加了一个分支
 add dev branch
-creating a new branch is quick & simple ----master.
+creating a new branch is quick and simple.
