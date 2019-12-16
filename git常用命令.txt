@@ -1,0 +1,50 @@
+git init                                 命令把这个目录变成Git可以管理的仓库;
+$ git add readme.txt                     告诉Git，把文件添加到仓库
+$ git commit -m "wrote a readme file"    告诉Git，把文件提交到仓库
+$ git status                             命令可以让我们时刻掌握仓库当前的状态
+$ git diff readme.txt                    查看readme.txt文件做了什么更改
+$ git log                                查看版本
+$ git log --pretty=oneline               查看版本简略信息
+$ git reset --hard HEAD^                 回退到上一个版本。在Git中，用HEAD表示当前版本，上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+$ git reset --hard 1094a                 指定回到某个版本。版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了
+$ git reflog                             git reflog用来记录你的每一次命令
+
+$ git checkout -- readme.txt             把readme.txt文件在工作区的修改全部撤销，这里有两种情况：一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。总之，就是让这个文件回到最近一次git commit或git add时的状态。git checkout -- file命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令。
+
+$ git reset HEAD readme.txt            git add到暂存区了，在commit之前，你发现了这个问题，用git status查看一下，修改只是添加到了暂存区，还没有提交：git reset HEAD <file>可以把暂存区的修改撤销掉（unstage），重新放回工作区。git reset命令既可以回退版本，也可以把暂存区的修改回退到工作区。
+$ git rm test.txt                       删除文件
+$ git remote add origin git@github.com:huanglei0916/learngit.git           把本地仓库与GitHub仓库关联
+$ git push -u origin master                                       把本地库的所有内容推送到远程库上。由于远程库是空的，我们第一次推送master分支时，加上了-u参数，Git不但会把本地的master分支内容推送的远程新的master分支，还会把本地的master分支和远程的master分支关联起来，在以后的推送或者拉取时就可以简化命令。 $ git push origin master
+$ git clone git@github.com:huanglei0916/gitskills.git                 clone远程库到本地
+
+$ git checkout -b dev   （$ git switch -c dev）             创建dev分支，然后切换到dev分支：
+$ git branch                                             git branch命令会列出所有分支，当前分支前面会标一个*号。
+$ git checkout master                                    切换回master分支：
+$ git merge dev                                把dev分支的工作成果合并到当前分支上：
+$ git branch -d dev                          删除dev分支了
+两个分支同时修改一个文件时，合并时要手动修改冲突。
+$ git log --graph --pretty=oneline --abbrev-commit               用带参数的git log也可以看到分支的合并情况
+$ git stash                                        Git还提供了一个stash功能，可以把当前工作现场“储藏”起来，等以后恢复现场后继续工作
+$ git stash list                        查看保存的工作现场
+工作现场还在，Git把stash内容存在某个地方了，但是需要恢复一下，有两个办法：
+一是用git stash apply恢复，但是恢复后，stash内容并不删除，你需要用git stash drop来删除；
+另一种方式是用git stash pop，恢复的同时把stash内容也删了：
+$ git stash apply stash@{0}      你可以多次stash，恢复的时候，先用git stash list查看，然后恢复指定的stash
+$ git cherry-pick 4c805e2              在master分支上修复了bug后，我们要想一想，dev分支是早期从master分支分出来的，所以，这个bug其实在当前dev分支上也存在。为了方便操作，Git专门提供了一个cherry-pick命令，让我们能复制一个特定的提交到当前分支
+$ git remote       查看远程库的信息，
+$ git push origin master（dev）      推送master分支 dev分支
+$ git checkout -b dev origin/dev       创建远程origin的dev分支到本地，于是他用这个命令创建本地dev分支
+$ git rebase           原本分叉的提交现在变成一条直线了！
+$ git tag v1.0    敲命令git tag <name>就可以打一个新标签
+$ git tag           命令git tag查看所有标签：
+$ git tag v0.9 f52c633    比方说要对add merge这次提交打标签，它对应的commit id是f52c633，敲入命令
+$ git tag -a v0.1 -m "version 0.1 released" 1094adb        可以创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+$ git tag -d v0.1      如果标签打错了，也可以删除：
+$ git push origin v1.0        如果要推送某个标签到远程，使用命令git push origin <tagname>：
+$ git push origin --tags        一次性推送全部尚未推送到远程的本地标签：
+如果标签已经推送到远程，要删除远程标签就麻烦一点，先从本地删除：  $ git tag -d v0.9         然后，从远程删除。删除命令也是push，但是格式如下：$ git push origin :refs/tags/v0.9
+
+如何参与一个开源项目呢？比如人气极高的bootstrap项目，这是一个非常强大的CSS框架，你可以访问它的项目主页https://github.com/twbs/bootstrap，点“Fork”就在自己的账号下克隆了一个bootstrap仓库，然后，从自己的账号下clone：git clone git@github.com:michaelliao/bootstrap.git。一定要从自己的账号下clone仓库，这样你才能推送修改。如果从bootstrap的作者的仓库地址git@github.com:twbs/bootstrap.git克隆，因为没有权限，你将不能推送修改。如果你希望bootstrap的官方库能接受你的修改，你就可以在GitHub上发起一个pull request。当然，对方是否接受你的pull request就不一定了。
+
+
+
